@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Book : {{ book.title ?? 'Not found' }}{% endblock %}
+
+{% block body %}
+    <div class="example-wrapper">
+        <h1>Movie : {{ book.title }}</h1>
+
+        <ul>
+            <li>Id : {{ book.id }}</li>
+            <li>Released at: {{ book.releasedAt|date('Y M d') }}</li>
+            <li>Author : {{ book.author }}</li>
+            <li>Price : {{ book.price }}</li>
+        </ul>
+    </div>
+{% endblock %}

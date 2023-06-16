@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title 'Books' %}
+
+{% block body %}
+    <div class="example-wrapper">
+        <h1>Available books</h1>
+
+        <section class="row row-cols-3 mt-5">
+            {% for book in books %}
+                <div class="col">
+                    <a href="{{ path('app_book_show', {'id': book.id}) }}">
+                        <div class="card w-75">
+                            <img src="#" alt="no image" class="card-img-overlay placeholder" height="250px">
+                            <div class="card-img-overlay text-white">
+                                <h5 class="card-title">{{ book.title }}</h5>
+                                <p class="card-text">Release date: {{ book.releasedAt|date('Y/m/d') }}</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% else %}
+                <p>No books in database yet...</p>
+            {% endfor %}
+        </section>
+    </div>
+{% endblock %}

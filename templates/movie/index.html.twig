@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title 'Movies' %}
+
+{% block body %}
+    <div class="example-wrapper text-center">
+        <h1>Available movies</h1>
+
+        <section class="row row-cols-3 mt-5">
+            {% for movie in movies %}
+                <div class="col">
+                    <a href="{{ path('app_movie_show', {'id': movie.id}) }}">
+                        <div class="card w-75 m-auto">
+                            <img src="{{ movie.poster }}" alt="{{ movie.poster }}">
+                            <div class="card-img-overlay text-white">
+                                <h5 class="card-title">{{ movie.title }}</h5>
+                                <p class="card-text">Release date: {{ movie.releasedAt|date('Y/m/d') }}</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% else %}
+                <p>No movies in database yet...</p>
+            {% endfor %}
+        </section>
+    </div>
+{% endblock %}

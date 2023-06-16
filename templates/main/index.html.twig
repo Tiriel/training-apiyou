@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title 'Accueil' %}
+
+{% block header %}
+    <section class="h-100 p-5" style="background-color: black;">
+        <div class="text-white text-center h-100">
+            <h1 class="display-3 font-weight-bold m-0">SensioTV+</h1>
+        </div>
+    </section>
+{% endblock %}
+
+{% block body %}
+    <section>
+        <h2 class="text-center">Latest movies:</h2>
+        <div class="row row-cols-3">
+            {% for movie in movies %}
+                <div class="col">
+                    <div class="card w-75 m-auto">
+                        <img src="{{ movie.poster }}" alt="{{ movie.poster }}">
+                        <div class="card-img-overlay text-white">
+                            <h5 class="card-title">{{ movie.title }}</h5>
+                            <p class="card-text">Release date: {{ movie.releasedAt|date('Y/m/d') }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <p class="col">No movies in database yet...</p>
+            {% endfor %}
+        </div>
+    </section>
+{% endblock %}
