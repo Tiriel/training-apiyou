@@ -19,6 +19,9 @@ class Book
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $cover = null;
+
     #[ORM\Column(length: 20)]
     private ?string $isbn = null;
 
@@ -55,6 +58,18 @@ class Book
     public function setTitle(string $title): static
     {
         $this->title = $title;
+
+        return $this;
+    }
+
+    public function getCover(): ?string
+    {
+        return $this->cover;
+    }
+
+    public function setCover(string $cover): static
+    {
+        $this->cover = $cover;
 
         return $this;
     }
