@@ -34,7 +34,7 @@ class Movie
     #[ORM\Column(nullable: true)]
     private ?int $price = null;
 
-    #[ORM\ManyToMany(targetEntity: Genre::class)]
+    #[ORM\ManyToMany(targetEntity: Genre::class, cascade: ['persist'])]
     private Collection $genre;
 
     public function __construct()

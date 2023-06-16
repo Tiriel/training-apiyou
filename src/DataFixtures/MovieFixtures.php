@@ -29,13 +29,10 @@ class MovieFixtures extends Fixture
                 ->setPlot($datum['Plot'])
                 ->setCountry($datum['Country'])
                 ->setReleasedAt(new \DateTimeImmutable($date))
-                ->setDirectors($datum['Director'])
-                ->setWriters($datum['Writer'])
-                ->setActors($datum['Actors'])
-                ->setRated($datum['Rated'])
-                ->setImdbId($datum['imdbID'])
                 ->setPoster($datum['Poster'])
                 ->setPrice(5.0)
+                //->setRated($datum['Rated'])
+                //->setImdbId($datum['imdbID'])
             ;
 
             foreach (explode(', ', $datum['Genre']) as $genreName) {
