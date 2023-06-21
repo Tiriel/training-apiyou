@@ -1,7 +1,5 @@
 {% extends 'base.html.twig' %}
 
-{% form_theme form 'bootstrap_5_horizontal_layout.html.twig' %}
-
 {% block title %}Hello MovieController!{% endblock %}
 
 {% block body %}
@@ -11,7 +9,7 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>New Movie</h1>
+    <h1>Movie form</h1>
 
     {{ form_start(form) }}
         {{ form_widget(form) }}

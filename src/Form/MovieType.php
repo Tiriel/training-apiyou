@@ -4,6 +4,9 @@ namespace App\Form;
 
 use App\Entity\Movie;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -12,13 +15,16 @@ class MovieType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('title')
-            ->add('poster')
-            ->add('plot')
-            ->add('releasedAt')
-            ->add('country')
-            ->add('price')
-            ->add('genre')
+            ->add('title', TextType::class)
+            ->add('poster', TextType::class, [
+                'label' => 'Poster (as URI)'
+            ])
+            ->add('plot', TextareaType::class)
+            ->add('releasedAt', DateType::class, [
+                'input'=> 'datetime_immutable',
+                'widget' =>'single_text',
+            ])
+            ->add('country', TextType::class)
         ;
     }
 
