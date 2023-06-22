@@ -2,26 +2,15 @@
 
 namespace App\Controller;
 
-use App\Consumer\OmdbApiConsumer;
 use App\Entity\Movie;
 use App\Form\MovieType;
-use App\Payment\PaymentFactory;
-use App\Provider\MovieProvider;
 use App\Repository\MovieRepository;
-use App\Search\OmdbMovieConsumer;
-use App\Search\SearchTypeEnum;
-use App\Search\Transformer\OmdbMovieTransformer;
-use App\Security\Voter\MovieVoter;
-use App\Transformer\OmdbToMovieTransformer;
-//use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+use App\Search\Provider\MovieProvider;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-//#[IsGranted('ROLE_MODERATOR')]
 #[Route('/movie')]
 class MovieController extends AbstractController
 {
@@ -63,12 +52,10 @@ class MovieController extends AbstractController
     }
 
     #[Route('/omdb/{title}', name: 'app_movie_omdb', methods: ['GET'])]
-    public function omdb(string $title, OmdbMovieConsumer $consumer, OmdbMovieTransformer $transformer): Response
+    public function omdb(string $title, MovieProvider $provider): Response
     {
-        $movie = $transformer->transform($consumer->fetchMovie(SearchTypeEnum::TITLE, $title));
-
         return $this->render('movie/show.html.twig', [
-            'movie' => $movie,
+            'movie' => $provider->getMovieByTitle($title),
         ]);
     }
 }
