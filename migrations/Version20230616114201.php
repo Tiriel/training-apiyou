@@ -29,15 +29,13 @@ final class Version20230616114201 extends AbstractMigration
         $this->addSql('CREATE TABLE comment (id INT NOT NULL, book_id INT NOT NULL, username VARCHAR(255) NOT NULL, subject VARCHAR(255) NOT NULL, message TEXT NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_9474526C16A2B381 ON comment (book_id)');
         $this->addSql('COMMENT ON COLUMN comment.created_at IS \'(DC2Type:datetime_immutable)\'');
-        $this->addSql('CREATE TABLE genre (id INT NOT NULL, movie_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
-        $this->addSql('CREATE INDEX IDX_835033F88F93B6FC ON genre (movie_id)');
+        $this->addSql('CREATE TABLE genre (id INT NOT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE TABLE movie (id INT NOT NULL, title VARCHAR(255) NOT NULL, poster VARCHAR(255) NOT NULL, plot TEXT NOT NULL, released_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, country VARCHAR(255) NOT NULL, price INT DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('COMMENT ON COLUMN movie.released_at IS \'(DC2Type:datetime_immutable)\'');
         $this->addSql('CREATE TABLE movie_genre (movie_id INT NOT NULL, genre_id INT NOT NULL, PRIMARY KEY(movie_id, genre_id))');
         $this->addSql('CREATE INDEX IDX_FD1229648F93B6FC ON movie_genre (movie_id)');
         $this->addSql('CREATE INDEX IDX_FD1229644296D31F ON movie_genre (genre_id)');
         $this->addSql('ALTER TABLE comment ADD CONSTRAINT FK_9474526C16A2B381 FOREIGN KEY (book_id) REFERENCES book (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
-        $this->addSql('ALTER TABLE genre ADD CONSTRAINT FK_835033F88F93B6FC FOREIGN KEY (movie_id) REFERENCES movie (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE movie_genre ADD CONSTRAINT FK_FD1229648F93B6FC FOREIGN KEY (movie_id) REFERENCES movie (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE movie_genre ADD CONSTRAINT FK_FD1229644296D31F FOREIGN KEY (genre_id) REFERENCES genre (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
     }

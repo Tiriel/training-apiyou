@@ -16,9 +16,6 @@ class Genre
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\ManyToOne(inversedBy: 'genre')]
-    private ?Movie $movie = null;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -32,18 +29,6 @@ class Genre
     public function setName(string $name): static
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getMovie(): ?Movie
-    {
-        return $this->movie;
-    }
-
-    public function setMovie(?Movie $movie): static
-    {
-        $this->movie = $movie;
 
         return $this;
     }

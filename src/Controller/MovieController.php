@@ -8,6 +8,9 @@ use App\Form\MovieType;
 use App\Payment\PaymentFactory;
 use App\Provider\MovieProvider;
 use App\Repository\MovieRepository;
+use App\Search\OmdbMovieConsumer;
+use App\Search\SearchTypeEnum;
+use App\Search\Transformer\OmdbMovieTransformer;
 use App\Security\Voter\MovieVoter;
 use App\Transformer\OmdbToMovieTransformer;
 //use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -56,6 +59,16 @@ class MovieController extends AbstractController
 
         return $this->render('movie/save.html.twig', [
             'form' => $form,
+        ]);
+    }
+
+    #[Route('/omdb/{title}', name: 'app_movie_omdb', methods: ['GET'])]
+    public function omdb(string $title, OmdbMovieConsumer $consumer, OmdbMovieTransformer $transformer): Response
+    {
+        $movie = $transformer->transform($consumer->fetchMovie(SearchTypeEnum::TITLE, $title));
+
+        return $this->render('movie/show.html.twig', [
+            'movie' => $movie,
         ]);
     }
 }
