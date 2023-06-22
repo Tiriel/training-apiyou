@@ -7,15 +7,22 @@ use App\Repository\MovieRepository;
 use App\Search\OmdbMovieConsumer;
 use App\Search\SearchTypeEnum;
 use App\Search\Transformer\OmdbMovieTransformer;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 class MovieProvider
 {
+    private ?SymfonyStyle $io = null;
     public function __construct(
         private readonly OmdbMovieConsumer $consumer,
         private readonly MovieRepository $repository,
         private readonly OmdbMovieTransformer $transformer,
         private readonly GenreProvider $genreProvider,
     ) {}
+
+    public function setIo(?SymfonyStyle $io): void
+    {
+        $this->io = $io;
+    }
 
     public function getMovieByTitle(string $title): Movie
     {
@@ -29,9 +36,12 @@ class MovieProvider
 
     public function getMovie(SearchTypeEnum $type, string $value): Movie
     {
+        $this->io?->text('Checking on OMDb API...');
         $data = $this->consumer->fetchMovie($type, $value);
+        $this->io?->text('Movie found!');
 
         if ($movie = $this->repository->findOneBy(['title' => $data['Title']])) {
+            $this->io?->note('Movie already in Database!');
             return $movie;
         }
 
@@ -40,6 +50,7 @@ class MovieProvider
             $movie->addGenre($genre);
         }
 
+        $this->io?->text('Saving movie in database.');
         $this->repository->save($movie, true);
 
         return $movie;

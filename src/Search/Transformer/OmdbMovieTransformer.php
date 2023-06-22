@@ -20,6 +20,8 @@ class OmdbMovieTransformer implements DataTransformerInterface
             ->setPlot($value['Plot'])
             ->setReleasedAt(new \DateTimeImmutable($date))
             ->setCountry($value['Country'])
+            ->setImdbId($value['imdbID'])
+            ->setRated($value['Rated'])
             ->setPrice(500)
             ;
     }

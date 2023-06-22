@@ -31,8 +31,8 @@ class MovieFixtures extends Fixture
                 ->setReleasedAt(new \DateTimeImmutable($date))
                 ->setPoster($datum['Poster'])
                 ->setPrice(5.0)
-                //->setRated($datum['Rated'])
-                //->setImdbId($datum['imdbID'])
+                ->setRated($datum['Rated'])
+                ->setImdbId($datum['imdbID'])
             ;
 
             foreach (explode(', ', $datum['Genre']) as $genreName) {

@@ -45,6 +45,12 @@ class Movie
     #[ORM\ManyToMany(targetEntity: Genre::class, cascade: ['persist'])]
     private Collection $genre;
 
+    #[ORM\Column(length: 255)]
+    private ?string $imdbId = null;
+
+    #[ORM\Column(length: 20, nullable: true)]
+    private ?string $rated = null;
+
     public function __construct()
     {
         $this->genre = new ArrayCollection();
@@ -155,6 +161,30 @@ class Movie
     public function removeGenre(Genre $genre): static
     {
         $this->genre->removeElement($genre);
+
+        return $this;
+    }
+
+    public function getImdbId(): ?string
+    {
+        return $this->imdbId;
+    }
+
+    public function setImdbId(string $imdbId): static
+    {
+        $this->imdbId = $imdbId;
+
+        return $this;
+    }
+
+    public function getRated(): ?string
+    {
+        return $this->rated;
+    }
+
+    public function setRated(?string $rated): static
+    {
+        $this->rated = $rated;
 
         return $this;
     }
