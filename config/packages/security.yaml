@@ -23,6 +23,11 @@ security:
         main:
             lazy: true
             provider: app_all_users_provider
+            custom_authenticator: App\Security\AppLoginFormAuthenticator
+            logout:
+                path: app_logout
+                # where to redirect after logout
+                target: app_main_index
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
