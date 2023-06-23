@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Book;
+use App\Event\Book\BookAddedEvent;
 use App\Form\Book1Type;
 use App\Repository\BookRepository;
 use App\Security\Voter\BookVoter;
@@ -11,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 #[Route('/admin/book')]
 class BookController extends AbstractController
@@ -24,7 +26,7 @@ class BookController extends AbstractController
     }
 
     #[Route('/new', name: 'app_admin_book_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, BookRepository $bookRepository): Response
+    public function new(Request $request, BookRepository $bookRepository, EventDispatcherInterface $dispatcher): Response
     {
         $book = new Book();
         $form = $this->createForm(Book1Type::class, $book);
@@ -32,6 +34,7 @@ class BookController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $bookRepository->save($book, true);
+            $dispatcher->dispatch(new BookAddedEvent($book));
 
             return $this->redirectToRoute('app_admin_book_index', [], Response::HTTP_SEE_OTHER);
         }

@@ -3,10 +3,12 @@
 namespace App\Search\Provider;
 
 use App\Entity\Movie;
+use App\Entity\User;
 use App\Repository\MovieRepository;
 use App\Search\OmdbMovieConsumer;
 use App\Search\SearchTypeEnum;
 use App\Search\Transformer\OmdbMovieTransformer;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 class MovieProvider
@@ -17,6 +19,7 @@ class MovieProvider
         private readonly MovieRepository $repository,
         private readonly OmdbMovieTransformer $transformer,
         private readonly GenreProvider $genreProvider,
+        private readonly Security $security,
     ) {}
 
     public function setIo(?SymfonyStyle $io): void
@@ -48,6 +51,10 @@ class MovieProvider
         $movie = $this->transformer->transform($data);
         foreach ($this->genreProvider->getGenresFromOmdbString($data['Genre']) as $genre) {
             $movie->addGenre($genre);
+        }
+
+        if (($user = $this->security->getUser()) instanceof User) {
+            $movie->setCreatedBy($user);
         }
 
         $this->io?->text('Saving movie in database.');

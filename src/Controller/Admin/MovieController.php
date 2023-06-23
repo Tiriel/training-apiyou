@@ -3,8 +3,10 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Movie;
+use App\Entity\User;
 use App\Form\MovieType;
 use App\Repository\MovieRepository;
+use App\Security\Voter\MovieVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,6 +31,9 @@ class MovieController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            if (($user = $this->getUser()) instanceof User) {
+                $movie->setCreatedBy($user);
+            }
             $movieRepository->save($movie, true);
 
             return $this->redirectToRoute('app_admin_movie_index', [], Response::HTTP_SEE_OTHER);
@@ -51,6 +56,7 @@ class MovieController extends AbstractController
     #[Route('/{id}/edit', name: 'app_admin_movie_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Movie $movie, MovieRepository $movieRepository): Response
     {
+        $this->denyAccessUnlessGranted(MovieVoter::EDIT, $movie);
         $form = $this->createForm(MovieType::class, $movie);
         $form->handleRequest($request);
 
