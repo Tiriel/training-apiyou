@@ -3,7 +3,9 @@
 namespace App\Manager;
 
 use App\Entity\Book;
+use App\Entity\User;
 use App\Repository\BookRepository;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Mailer\MailerInterface;
@@ -15,8 +17,7 @@ class BookManager implements ManagerInterface
         private readonly BookRepository $repository,
         #[Autowire('%app.books_per_page%')]
         private readonly int $booksPerPage,
-        #[Autowire(service: 'mailer.mailer')]
-        private readonly MailerInterface $mailer,
+        private readonly Security $security,
     ) {}
 
     public function getOne(string $title): Book
@@ -30,7 +31,17 @@ class BookManager implements ManagerInterface
     {
         //
 
-        $this->mailer->send(new Message());
         return $this->repository->findBy([], ['id' => 'DESC'], $this->booksPerPage);
+    }
+
+    public function new(Book $book): Book
+    {
+        if (($user = $this->security->getUser()) instanceof User) {
+            $book->setCreatedBy($user);
+        }
+
+        $this->repository->save($book, true);
+
+        return $book;
     }
 }
